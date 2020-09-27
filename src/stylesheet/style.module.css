@@ -1,0 +1,159 @@
+.square {
+  content: "";
+  display: block;
+  padding: 20px;
+  background-color: lightgray;
+}
+.player {
+  padding: 20px;
+  display: none;
+  width: 20%;
+  text-align: center;
+  position: relative;
+}
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu .show {
+  top: 0px;
+  left: 100px;
+}
+.dropdown .dropbtn {
+  border: none;
+  outline: none;
+  padding: 0px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+ul {
+  list-style-type: none;
+}
+.show {
+  display: block;
+}
+.dropdown-submenu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  position: relative;
+}
+
+.dropdown-content {
+  display: block;
+  top: 0;
+  z-index: 10;
+  float: right;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-content button {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.edit-player-number {
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.player-select-button {
+  position: relative;
+}
+
+.teamsheet {
+  margin: 10px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+
+.edit-player-number {
+  position: absolute;
+  top: 0;
+}
+
+.oi-media-play {
+  font-size: 20px;
+}
+
+.oi-pencil {
+  font-size: 10px;
+}
+
+.oi-media-pause {
+  font-size: 20px;
+}
+.oi-media-record {
+  font-size: 20px;
+}
+
+#startTimer {
+  margin: 5;
+  padding: 0;
+}
+
+#stopTimer {
+  margin: 5;
+  padding: 0;
+}
+#pauseTimer {
+  margin: 5;
+  padding: 0;
+}
+.event {
+  display: block;
+  margin: 5px;
+}
+.outcome {
+  display: block;
+  margin: 5px;
+}
+
+.pitch-col {
+  padding: 0px;
+}
+
+.pitchzone {
+  background-color: #ff5050;
+  width: 100%;
+  margin: 1px;
+  height: 70px;
+  text-align: center;
+  opacity: 0.8;
+  border: none;
+}
+
+.pitchzone:hover {
+  opacity: 0.9;
+  color: black;
+  border: 2px solid #e7e7e7;
+  border-radius: 2px;
+}
+
+.overlay {
+  position: absolute;
+  top: 70;
+  left: 50;
+  width: 80% !important;
+  height: 80% !important;
+  opacity: 1;
+}
+.gray {
+  background-color: lightgray;
+}
+.green {
+  background-color: lightgreen;
+}
+.img-crest {
+  height: 30px;
+  width: 40px;
+}
