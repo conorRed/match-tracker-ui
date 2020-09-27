@@ -1,5 +1,5 @@
 export function teamsCall() {
-  return fetch("http://localhost:8080/teams")
+  return fetch("/api/teams")
     .then((res) => res.json())
     .then((result) => {
       return result;
@@ -10,7 +10,7 @@ export function teamsCall() {
 }
 
 export function eventsCall() {
-  return fetch("http://localhost:8080/events")
+  return fetch("/api/events")
     .then((res) => res.json())
     .then((result) => {
       return result;
