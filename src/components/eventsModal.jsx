@@ -1,38 +1,21 @@
 import React, { Component } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { eventsCall } from "../helpers";
 import Form from "react-bootstrap/Form";
 import "../stylesheet/stylesheet.css";
 import pitch from "../img/pitch.png";
+import LoadingSpinner from "./loadingSpinner";
 class EventsModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: [],
-      areEventsLoaded: false,
-      event: null,
+      events: this.props.events,
+      areOutcomesLoaded: false,
+      event: this.props.events[0],
       outcomes: [],
       outcome: null,
       showPitchModal: false,
     };
-  }
-  componentDidMount() {
-    eventsCall().then((res) => {
-      this.setState(
-        {
-          areEventsLoaded: true,
-          events: res,
-          event: res[0],
-        },
-        function () {
-          this.setState({
-            outcomes: this.state.event.outcomes,
-            outcome: this.state.event.outcomes[0],
-          });
-        }
-      );
-    });
   }
 
   openPitchModal(show) {
@@ -42,10 +25,25 @@ class EventsModal extends Component {
   setOutcomesSelect = (e) => {
     let currentEvent = e.target.value;
     const newLocal = this.state.events.filter((event) => {
-      return event.event === currentEvent;
+      return event.name === currentEvent;
     });
 
-    this.setState({ event: newLocal[0], outcomes: newLocal[0].outcomes });
+    fetch("/api/events/" + newLocal[0].id + "/outcomes")
+      .then((res) => res.json())
+      .then((result) => {
+        if (!(result["data"] === 0)) {
+          this.setState({
+            areOutcomesLoaded: true,
+            outcomes: result["data"],
+            outcome: result["data"][0].name,
+          });
+        } else {
+          this.setState({ areOutcomesLoaded: false });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   onOutcomeSelect = (e) => {
@@ -54,7 +52,7 @@ class EventsModal extends Component {
 
   saveData = () => {
     this.props.addData({
-      event: this.state.event.event,
+      event: this.state.event.name,
       outcome: this.state.outcome,
       team: this.props.team,
       player: this.props.name,
@@ -87,6 +85,7 @@ class EventsModal extends Component {
             onOutcomeSelect={this.onOutcomeSelect}
             events={this.state.events}
             outcomes={this.state.outcomes}
+            areOutcomesLoaded={this.state.areOutcomesLoaded}
           />
           <PitchModal show={this.state.showPitchModal} />
           <Modal.Footer>
@@ -170,7 +169,7 @@ function EventModal(props) {
               onChange={props.setOutcomesSelect}
             >
               {props.events.map((event, index) => {
-                return <option key={index}>{event.event}</option>;
+                return <option key={index}>{event.name}</option>;
               })}
             </select>
           </Form.Group>
@@ -178,11 +177,18 @@ function EventModal(props) {
         <div className="row">
           <Form.Group className="col text-center">
             <Form.Label>Outcome</Form.Label>
-            <select className="custom-select" onChange={props.onOutcomeSelect}>
-              {props.outcomes.map((outcome) => {
-                return <option key={outcome}>{outcome}</option>;
-              })}
-            </select>
+            {props.areOutcomesLoaded ? (
+              <select
+                className="custom-select"
+                onChange={props.onOutcomeSelect}
+              >
+                {props.outcomes.map((outcome) => {
+                  return <option key={outcome.id}>{outcome.name}</option>;
+                })}
+              </select>
+            ) : (
+              <LoadingSpinner />
+            )}
           </Form.Group>
         </div>
       </div>

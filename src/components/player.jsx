@@ -12,7 +12,7 @@ class Player extends Component {
   };
 
   styles = {
-    padding: 20,
+    padding: 12,
     display: "block",
     textAlign: "center",
     position: "relative",
@@ -49,6 +49,7 @@ class Player extends Component {
           addData={this.props.addData}
           number={this.state.number}
           name={this.state.name}
+          events={this.props.events}
           team={this.props.team}
           onHide={() => this.showEventModal(false)}
         />

@@ -1,36 +1,71 @@
 import React, { Component } from "react";
 import Player from "./player";
-
+import { eventsCall } from "../helpers";
+import LineupDefault from "./lineups/default";
+import LoadingSpinner from "./loadingSpinner";
 class Team extends Component {
   state = {
-    lineup: this.props.lineup.lineup,
     name: this.props.name,
     colour: this.props.colour,
+    arePlayersLoaded: false,
+    areEventsLoaded: false,
+    events: [],
+    players: [],
   };
+  componentDidMount() {
+    fetch("/api/teams/" + this.props.team_id + "/players")
+      .then((res) => res.json())
+      .then((result) => {
+        if (!(result["data"] === 0)) {
+          this.setState({ arePlayersLoaded: true, players: result["data"] });
+        } else {
+          this.setState({ arePlayersLoaded: false });
+        }
+
+        eventsCall()
+          .then((res) => {
+            if (!(result["data"] === 0)) {
+              this.setState({ areEventsLoaded: true, events: res });
+            } else {
+              this.setState({ arePlayersLoaded: false });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   render() {
-    return (
-      <div className="container">
-        <h2 className="display-5 text-center">{this.state.name}</h2>
-        {this.state.lineup.map((line, index) => {
-          return (
-            <div className="row" key={index}>
-              {line.players.map((player) => {
-                return (
-                  <Player
-                    addData={this.props.addData}
-                    key={player.number}
-                    number={player.number}
-                    name={player.name}
-                    colour={this.state.colour}
-                    team={this.state.name}
-                  />
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-    );
+    let playerList = [];
+    const { arePlayersLoaded, areEventsLoaded } = this.state;
+
+    console.log(this.state.players);
+    if (areEventsLoaded && arePlayersLoaded) {
+      return (
+        <div className="container">
+          <LineupDefault
+            players={this.state.players.map((player, index) => {
+              return (
+                <Player
+                  addData={this.props.addData}
+                  events={this.state.events}
+                  key={player.number}
+                  number={player.number}
+                  name={player.name}
+                  colour={this.state.colour}
+                  team={this.state.name}
+                />
+              );
+            })}
+          />
+        </div>
+      );
+    } else {
+      return <LoadingSpinner />;
+    }
   }
 }
 
