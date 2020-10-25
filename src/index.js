@@ -50,7 +50,14 @@ class Index extends Component {
       data: [...prevState.data, da],
     }));
   };
-  tableHeaders = ["Team", "Player", "Event", "Outcome", "Timestamp"];
+  tableHeaders = [
+    "Team",
+    "Player",
+    "Event",
+    "Outcome",
+    "Pitchzone",
+    "Timestamp",
+  ];
   render() {
     return (
       <div className="container">

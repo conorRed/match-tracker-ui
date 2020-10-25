@@ -14,6 +14,7 @@ class EventsModal extends Component {
       event: this.props.events[0],
       outcomes: [],
       outcome: null,
+      pitchzone: null,
       showPitchModal: false,
     };
   }
@@ -49,13 +50,16 @@ class EventsModal extends Component {
   onOutcomeSelect = (e) => {
     this.setState({ outcome: e.target.value });
   };
-
+  pitchSelect = (e) => {
+    this.setState({ pitchzone: e.target.value });
+  };
   saveData = () => {
     this.props.addData({
       event: this.state.event.name,
       outcome: this.state.outcome,
       team: this.props.team,
       player: this.props.name,
+      pitchzone: this.state.pitchzone,
     });
     this.props.onHide();
   };
@@ -87,7 +91,10 @@ class EventsModal extends Component {
             outcomes={this.state.outcomes}
             areOutcomesLoaded={this.state.areOutcomesLoaded}
           />
-          <PitchModal show={this.state.showPitchModal} />
+          <PitchModal
+            show={this.state.showPitchModal}
+            pitchSelect={this.pitchSelect}
+          />
           <Modal.Footer>
             <Button onClick={() => this.openPitchModal(false)}>Previous</Button>
 
@@ -115,39 +122,51 @@ function PitchModal(props) {
             <button
               className="col pitchzone"
               data-dismiss="modal"
-              data-pitchzone="Cornerback-Left"
+              onClick={props.pitchSelect}
+              value="Cornerback-Left"
             ></button>
             <button
               className="col pitchzone"
-              data-pitchzone="Mid-Left"
+              onClick={props.pitchSelect}
+              value="Mid-Left"
             ></button>
             <button
               className="col pitchzone"
-              data-pitchzone="CornerForward-Left"
-            ></button>
-          </div>
-          <div className="row">
-            <button
-              className="col pitchzone"
-              data-pitchzone="Fullback"
-            ></button>
-            <button
-              className="col pitchzone"
-              data-pitchzone="Center Field"
-            ></button>
-            <button
-              className="col pitchzone"
-              data-pitchzone="Fullforward"
+              onClick={props.pitchSelect}
+              value="CornerForward-Left"
             ></button>
           </div>
           <div className="row">
             <button
               className="col pitchzone"
+              onClick={props.pitchSelect}
+              value="Fullback"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={props.pitchSelect}
+              value="Center Field"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={props.pitchSelect}
+              value="Fullforward"
+            ></button>
+          </div>
+          <div className="row">
+            <button
+              className="col pitchzone"
+              onClick={props.pitchSelect}
               value="CornerForward-Right"
             ></button>
-            <button className="col pitchzone" value="Mid-Right"></button>
             <button
               className="col pitchzone"
+              onClick={props.pitchSelect}
+              value="Mid-Right"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={props.pitchSelect}
               value="CornerForward-Right"
             ></button>
           </div>
