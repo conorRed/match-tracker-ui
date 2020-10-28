@@ -16,7 +16,7 @@ class Team extends Component {
     fetch("/api/teams/" + this.props.team_id + "/players")
       .then((res) => res.json())
       .then((result) => {
-        if (!(result["data"] === 0)) {
+        if (!(result === 0)) {
           this.setState({ arePlayersLoaded: true, players: result["data"] });
         } else {
           this.setState({ arePlayersLoaded: false });
@@ -24,7 +24,7 @@ class Team extends Component {
 
         eventsCall()
           .then((res) => {
-            if (!(result["data"] === 0)) {
+            if (!(result === 0)) {
               this.setState({ areEventsLoaded: true, events: res });
             } else {
               this.setState({ arePlayersLoaded: false });

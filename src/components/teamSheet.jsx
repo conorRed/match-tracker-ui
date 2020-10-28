@@ -17,13 +17,13 @@ class TeamSheet extends Component {
   };
   componentDidMount() {
     teamsCall().then((res) => {
-      if (res["data"].length === 0) {
+      if (res.length === 0) {
         this.setState({ isLoaded: false });
       } else {
         this.setState({
           isLoaded: true,
-          pickedTeam: res["data"][0],
-          teams: res["data"],
+          pickedTeam: res[0],
+          teams: res,
         });
       }
     });

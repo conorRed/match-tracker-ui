@@ -2,7 +2,7 @@ export function teamsCall() {
   return fetch("/api/teams")
     .then((res) => res.json())
     .then((result) => {
-      return result;
+      return result["data"];
     })
     .catch((err) => {
       console.log(err);
