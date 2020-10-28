@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { CSVLink, CSVDownload } from "react-csv";
+import { FaDownload } from "react-icons/fa";
 
 class DataTable extends Component {
   constructor(props) {
@@ -22,6 +24,11 @@ class DataTable extends Component {
                 </th>
               );
             })}
+            <th>
+              <CSVLink data={this.props.rows}>
+                <FaDownload />
+              </CSVLink>
+            </th>
           </tr>
         </thead>
         <tbody>
