@@ -1,7 +1,10 @@
 FROM node:12.18.1 as builder
 
 WORKDIR /app
-COPY . .
+COPY ./package.json ./
+COPY ./package-lock.json ./
+RUN npm install --silent
+COPY . . 
 RUN yarn run build
 
 FROM nginx
