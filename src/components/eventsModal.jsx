@@ -10,9 +10,9 @@ class EventsModal extends Component {
     super(props);
     this.state = {
       events: this.props.events,
-      areOutcomesLoaded: false,
+      areOutcomesLoaded: true,
       event: this.props.events[0],
-      outcomes: [],
+      outcomes: this.fetchInitialOutcomes(this.props.events[0]),
       outcome: null,
       pitchzone: null,
       showPitchModal: false,
@@ -23,12 +23,30 @@ class EventsModal extends Component {
     this.setState({ showPitchModal: show });
   }
 
+  fetchInitialOutcomes(event) {
+    fetch("/api/events/" + event.id + "/outcomes")
+      .then((res) => res.json())
+      .then((result) => {
+        if (!(result["data"] === 0)) {
+          this.setState({
+            areOutcomesLoaded: true,
+            outcomes: result["data"],
+            outcome: result["data"][0].name,
+          });
+        } else {
+          this.setState({ areOutcomesLoaded: false });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   setOutcomesSelect = (e) => {
     let currentEvent = e.target.value;
     const newLocal = this.state.events.filter((event) => {
       return event.name === currentEvent;
     });
-
     fetch("/api/events/" + newLocal[0].id + "/outcomes")
       .then((res) => res.json())
       .then((result) => {
@@ -37,6 +55,7 @@ class EventsModal extends Component {
             areOutcomesLoaded: true,
             outcomes: result["data"],
             outcome: result["data"][0].name,
+            event: newLocal[0],
           });
         } else {
           this.setState({ areOutcomesLoaded: false });
