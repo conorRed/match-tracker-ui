@@ -80,6 +80,9 @@ class EventsModal extends Component {
       player: this.props.name,
       pitchzone: this.state.pitchzone,
     });
+    this.setState({
+      showPitchModal: false,
+    });
     this.props.onHide();
   };
 
