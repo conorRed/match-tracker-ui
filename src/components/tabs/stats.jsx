@@ -30,11 +30,12 @@ class Stats extends Component {
 
   scoreEfficiency(team) {
     let totalShots = this.frequencyOfEvent("Shot", team);
+    let totalFrees = this.frequencyOfEvent("Free", team);
     let totalScores = this.props.data.filter(
       (row) => ["Point", "Goal"].includes(row.outcome) && row.team == team
     );
 
-    return ((totalScores.length / totalShots) * 100).toFixed(1);
+    return ((totalScores.length / (totalShots + totalFrees)) * 100).toFixed(1);
   }
   kickoutEfficiency(team) {
     let totalShots = this.frequencyOfEvent("Kickout", team);
