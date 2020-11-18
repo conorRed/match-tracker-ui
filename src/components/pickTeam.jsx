@@ -20,7 +20,11 @@ class PickTeam extends Component {
                   value={this.props.defaultValue}
                 >
                   {this.props.teams.map((team) => {
-                    return <option value={team.name}>{team.name}</option>;
+                    return (
+                      <option key={team.name} value={team.name}>
+                        {team.name}
+                      </option>
+                    );
                   })}
                 </select>
               </div>

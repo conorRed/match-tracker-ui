@@ -41,8 +41,6 @@ class Team extends Component {
   render() {
     let playerList = [];
     const { arePlayersLoaded, areEventsLoaded } = this.state;
-
-    console.log(this.state.players);
     if (areEventsLoaded && arePlayersLoaded) {
       return (
         <div className="container">

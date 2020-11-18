@@ -4,7 +4,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./js/script.js";
 import TeamSheet from "./components/teamSheet";
 import Timer from "./components/timer";
-import DataTable from "./components/dataTable";
+import Tab from "react-bootstrap/Tab";
+import Nav from "react-bootstrap/Nav";
+import DataTable from "./components/tabs/dataTable";
+import Stats from "./components/tabs/stats";
 
 class Index extends Component {
   state = {
@@ -58,6 +61,13 @@ class Index extends Component {
     "Pitchzone",
     "Timestamp",
   ];
+
+  teamSelect = (team) => {
+    console.log(team);
+    let oldTeams = this.state.teams.slice();
+    oldTeams.push(team);
+    this.setState({ teams: oldTeams });
+  };
   render() {
     return (
       <div className="container">
@@ -65,17 +75,57 @@ class Index extends Component {
           <div className="col-10">
             <div className="row">
               <div className="col-5">
-                <TeamSheet addData={this.updateTable} />
+                <TeamSheet
+                  teamSelect={this.teamSelect}
+                  addData={this.updateTable}
+                />
               </div>
               <div className="col-2">
                 <Timer ref={this.state.timerRef} />
               </div>
               <div className="col-5">
-                <TeamSheet addData={this.updateTable} />
+                <TeamSheet
+                  teamSelect={this.teamSelect}
+                  addData={this.updateTable}
+                />
               </div>
             </div>
-            <div className="row">
-              <DataTable rows={this.state.data} headers={this.tableHeaders} />
+            <div>
+              <Tab.Container defaultActiveKey="data">
+                <div className="row">
+                  <div className="col-sm-3">
+                    <Nav variant="pills" className="flex-column">
+                      <Nav.Item>
+                        <Nav.Link eventKey="data">Data</Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="stats">Stats</Nav.Link>
+                      </Nav.Item>
+                    </Nav>
+                  </div>
+                  <div className="col-sm-9">
+                    <Tab.Content>
+                      <Tab.Pane eventKey="data">
+                        <DataTable
+                          rows={this.state.data}
+                          headers={this.tableHeaders}
+                        />
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="stats">
+                        <div className="row">
+                          {this.state.teams.map((team) => {
+                            return (
+                              <div className="col">
+                                <Stats team={team} data={this.state.data} />
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </Tab.Pane>
+                    </Tab.Content>
+                  </div>
+                </div>
+              </Tab.Container>
             </div>
           </div>
         </div>

@@ -8,7 +8,6 @@ import LoadingSpinner from "./loadingSpinner";
 class TeamSheet extends Component {
   state = {
     teams: [],
-    teamImgUrl: "https://picsum.photos/200",
     pickedTeam: null,
     isTeamPicked: false,
     isLoaded: false,
@@ -41,6 +40,7 @@ class TeamSheet extends Component {
     this.setState({
       isTeamPicked: true,
     });
+    this.props.teamSelect(this.state.pickedTeam);
   };
   addData = (data) => {
     switch (data.outcome) {
@@ -57,7 +57,6 @@ class TeamSheet extends Component {
   };
   render() {
     const { isLoaded, teams, isTeamPicked } = this.state;
-    console.log(this.state.goals);
     if (isLoaded) {
       if (isTeamPicked) {
         return (
