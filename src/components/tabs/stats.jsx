@@ -63,6 +63,8 @@ class Stats extends Component {
         })}
         <div>
           Scoring Effeciency: {this.scoreEfficiency(this.props.team.name)}%
+        </div>
+        <div>
           Kickout Effeciency: {this.kickoutEfficiency(this.props.team.name)}%
         </div>
       </>
