@@ -7,6 +7,7 @@ import Timer from "./components/timer";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import DataTable from "./components/tabs/dataTable";
+import TeamForm from "./components/forms/teamForm";
 import Stats from "./components/tabs/stats";
 
 class Index extends Component {
@@ -63,11 +64,11 @@ class Index extends Component {
   ];
 
   teamSelect = (team) => {
-    console.log(team);
     let oldTeams = this.state.teams.slice();
     oldTeams.push(team);
     this.setState({ teams: oldTeams });
   };
+
   render() {
     return (
       <div className="container">
@@ -101,6 +102,9 @@ class Index extends Component {
                       <Nav.Item>
                         <Nav.Link eventKey="stats">Stats</Nav.Link>
                       </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="create-team">Create Team</Nav.Link>
+                      </Nav.Item>
                     </Nav>
                   </div>
                   <div className="col-sm-9">
@@ -121,6 +125,9 @@ class Index extends Component {
                             );
                           })}
                         </div>
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="create-team">
+                        <TeamForm />
                       </Tab.Pane>
                     </Tab.Content>
                   </div>

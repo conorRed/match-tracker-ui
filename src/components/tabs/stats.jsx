@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { eventsCall } from "../../helpers";
+import { getEvents } from "../../api/helpers";
 
 class Stats extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class Stats extends Component {
     };
   }
   componentDidMount() {
-    eventsCall()
+    getEvents()
       .then((res) => {
         this.setState({ areEventsLoaded: true, events: res });
       })

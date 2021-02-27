@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import "../stylesheet/stylesheet.css";
 import pitch from "../img/pitch.png";
 import LoadingSpinner from "./loadingSpinner";
+import { getOutcomesForEvent } from "../api/helpers.js";
 class EventsModal extends Component {
   constructor(props) {
     super(props);
@@ -24,14 +25,14 @@ class EventsModal extends Component {
   }
 
   fetchInitialOutcomes(event) {
-    fetch("/api/events/" + event.id + "/outcomes")
+    getOutcomesForEvent(event.id)
       .then((res) => res.json())
       .then((result) => {
-        if (!(result["data"] === 0)) {
+        if (!(result.length === 0)) {
           this.setState({
             areOutcomesLoaded: true,
-            outcomes: result["data"],
-            outcome: result["data"][0].name,
+            outcomes: result,
+            outcome: result[0].name,
           });
         } else {
           this.setState({ areOutcomesLoaded: false });
@@ -47,14 +48,14 @@ class EventsModal extends Component {
     const newLocal = this.state.events.filter((event) => {
       return event.name === currentEvent;
     });
-    fetch("/api/events/" + newLocal[0].id + "/outcomes")
+    getOutcomesForEvent(newLocal[0].id)
       .then((res) => res.json())
       .then((result) => {
-        if (!(result["data"] === 0)) {
+        if (!(result.length === 0)) {
           this.setState({
             areOutcomesLoaded: true,
-            outcomes: result["data"],
-            outcome: result["data"][0].name,
+            outcomes: result,
+            outcome: result[0].name,
             event: newLocal[0],
           });
         } else {

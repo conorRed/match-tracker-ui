@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Team from "./team";
-import { teamsCall } from "../helpers";
+import { getTeams } from "../api/helpers";
 import PickTeam from "./pickTeam";
 import Scoreboard from "./scoreboard";
 import LoadingSpinner from "./loadingSpinner";
@@ -15,7 +15,7 @@ class TeamSheet extends Component {
     points: 0,
   };
   componentDidMount() {
-    teamsCall().then((res) => {
+    getTeams().then((res) => {
       if (res.length === 0) {
         this.setState({ isLoaded: false });
       } else {

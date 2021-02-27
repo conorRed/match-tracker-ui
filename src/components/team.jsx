@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Player from "./player";
-import { eventsCall } from "../helpers";
+import { getEvents } from "../api/helpers";
 import LineupDefault from "./lineups/default";
 import LoadingSpinner from "./loadingSpinner";
 class Team extends Component {
@@ -22,7 +22,7 @@ class Team extends Component {
           this.setState({ arePlayersLoaded: false });
         }
 
-        eventsCall()
+        getEvents()
           .then((res) => {
             if (!(result === 0)) {
               this.setState({ areEventsLoaded: true, events: res });
