@@ -26,7 +26,6 @@ class EventsModal extends Component {
 
   fetchInitialOutcomes(event) {
     getOutcomesForEvent(event.id)
-      .then((res) => res.json())
       .then((result) => {
         if (!(result.length === 0)) {
           this.setState({

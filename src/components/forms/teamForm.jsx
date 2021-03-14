@@ -12,54 +12,40 @@ class TeamForm extends Component {
       name: "",
       colour: "",
       colourError: "",
+      validated: false,
+      teamId: null,
+      teamCreated: false,
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleColourChange = this.handleColourChange.bind(this);
   }
-  // to change parent state pass callbacks
-  handleNameChange(event) {
-    console.log(event);
-    this.setState({ name: event.target.value });
-  }
-  handleColourChange(event) {
-    this.setState({ colour: event.value });
-  }
-  handleSubmit(event) {
-    if (this.state.name == "") {
-      return;
-    }
-    createTeam({
-      name: this.state.name,
-      colour: this.state.colour,
-    }).then((res) => {
-      console.log(res);
-    });
-  }
+
   render() {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Group>
+      <Form validated={this.state.validated}>
+        <Form.Label>{this.state.colourError}</Form.Label>
+        <br></br>
+        <Form.Group controlId="validationCustom01">
           <Form.Label>Team Name</Form.Label>
           <Form.Control
             type="text"
             required={true}
-            onChange={this.handleNameChange}
+            onChange={this.props.handleNameChange}
           />
+          <Form.Control.Feedback type="invalid">
+            Please add a Team name.
+          </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group>
+        <Form.Group controlId="validationCustom02">
           <Select
-            onChange={this.handleColourChange}
-            value={this.state.colour}
+            onChange={this.props.handleColourChange}
             className="basic-single"
             classNamePrefix="select"
             name="colour"
             options={colourOptions}
           />
+          <Form.Control.Feedback type="invalid">
+            Choose a colour
+          </Form.Control.Feedback>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
       </Form>
     );
   }

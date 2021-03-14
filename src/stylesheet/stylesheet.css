@@ -56,3 +56,16 @@
   height: 80% !important;
   opacity: 1;
 }
+
+.player-form {
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  border-radius: 10px;
+}
+
+.player-avatar {
+  text-align: center;
+  font-size: 30px;
+}

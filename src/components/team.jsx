@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Player from "./player";
-import { getEvents } from "../api/helpers";
+import { getEvents, getPlayers } from "../api/helpers";
 import LineupDefault from "./lineups/default";
 import LoadingSpinner from "./loadingSpinner";
 class Team extends Component {
@@ -13,11 +13,10 @@ class Team extends Component {
     players: [],
   };
   componentDidMount() {
-    fetch("/api/teams/" + this.props.team_id + "/players")
-      .then((res) => res.json())
+    getPlayers(this.props.team_id)
       .then((result) => {
-        if (!(result === 0)) {
-          this.setState({ arePlayersLoaded: true, players: result["data"] });
+        if (!(result.length === 0)) {
+          this.setState({ arePlayersLoaded: true, players: result });
         } else {
           this.setState({ arePlayersLoaded: false });
         }

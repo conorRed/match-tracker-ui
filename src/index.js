@@ -7,8 +7,8 @@ import Timer from "./components/timer";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import DataTable from "./components/tabs/dataTable";
-import TeamForm from "./components/forms/teamForm";
 import Stats from "./components/tabs/stats";
+import CreateFormContainer from "./components/forms/createFormContainer.jsx";
 
 class Index extends Component {
   state = {
@@ -127,7 +127,7 @@ class Index extends Component {
                         </div>
                       </Tab.Pane>
                       <Tab.Pane eventKey="create-team">
-                        <TeamForm />
+                        <CreateFormContainer />
                       </Tab.Pane>
                     </Tab.Content>
                   </div>
