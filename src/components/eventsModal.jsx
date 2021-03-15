@@ -48,7 +48,6 @@ class EventsModal extends Component {
       return event.name === currentEvent;
     });
     getOutcomesForEvent(newLocal[0].id)
-      .then((res) => res.json())
       .then((result) => {
         if (!(result.length === 0)) {
           this.setState({
