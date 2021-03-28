@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { createTeam, createPlayer } from "../../api/helpers.js";
+import { createTeam, createPlayer, handleError } from "../../api/helpers.js";
 import TeamForm from "./teamForm";
 import PlayerForm from "./playerForm";
 import Button from "react-bootstrap/Button";
@@ -37,7 +37,7 @@ class CreateFormContainer extends Component {
           this.setState({
             colourError: "Theres already a team with this colour",
           });
-          throw Error(response.statusText);
+          throw Error(response.status);
         }
         return response;
       })
@@ -62,20 +62,14 @@ class CreateFormContainer extends Component {
                   "Players Created for new team: " + res.name,
                 infoVariant: "success",
               });
-            })
-            .catch((err) => {
-              console.log(err.message);
-              this.setState({
-                creationInformation: "Error while creating players for team",
-                infoVariant: "danger",
-              });
             });
         }
       })
-      .catch((err) => {
-        console.log(err.message);
+      .catch((status) => {
+        console.log(status);
+        let message = handleError(status.message);
         this.setState({
-          creationInformation: "Error while creating team",
+          creationInformation: message,
           infoVariant: "danger",
         });
       });

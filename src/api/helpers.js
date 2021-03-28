@@ -74,3 +74,13 @@ export function createPlayer(jsonObj) {
     body: JSON.stringify(jsonObj),
   });
 }
+
+export function handleError(errorStatus) {
+  if (errorStatus === "500") {
+    return "There was an issue processing your request";
+  } else if (errorStatus === "400") {
+    return "Please fill in missing fields";
+  } else {
+    return;
+  }
+}

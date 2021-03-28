@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button";
-import Select from "react-select";
-import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import "../../stylesheet/stylesheet.css";
-import { createTeam } from "../../api/helpers.js";
 import { FaUser } from "react-icons/fa";
 
 class PlayerForm extends Component {
