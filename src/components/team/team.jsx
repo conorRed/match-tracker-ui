@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Player from "./player";
-import { getEvents, getPlayers } from "../api/helpers";
+import Player from "./player/player";
+import { getEvents, getPlayers } from "../../api/helpers";
 import LineupDefault from "./lineups/default";
-import LoadingSpinner from "./loadingSpinner";
+import LoadingSpinner from "../loadingSpinner";
 class Team extends Component {
   state = {
     name: this.props.name,
@@ -38,7 +38,6 @@ class Team extends Component {
       });
   }
   render() {
-    let playerList = [];
     const { arePlayersLoaded, areEventsLoaded } = this.state;
     if (areEventsLoaded && arePlayersLoaded) {
       return (

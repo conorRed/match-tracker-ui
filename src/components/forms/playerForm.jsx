@@ -9,22 +9,25 @@ class PlayerForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      number: "",
-      validated: false,
-      playerFormIds: [],
-      playersMap: [{}],
+      players: [],
     };
-    for (let i = 1; i < 16; i++) {
-      this.props.registerPlayer(i);
-    }
   }
   // to change parent state pass callbacks
 
   handleSubmit(event) {
-    const form = event.currentTarget;
     event.preventDefault();
-    this.props.handleSubmit(this.state.playersMap);
+    this.props.handleSubmit(this.state.players);
+  }
+
+  onPlayerNameChange(event, id) {
+    console.log(this.state.players);
+    let oldPlayers = this.state.players;
+    oldPlayers[id].name = event.currentTarget.value;
+  }
+
+  onPlayerNumberChange(event, id) {
+    let oldPlayers = this.state.players;
+    oldPlayers[id].number = event.currentTarget.value;
   }
 
   playerForm(id) {
@@ -37,9 +40,10 @@ class PlayerForm extends Component {
           <Form.Label column="sm">Name</Form.Label>
           <Form.Control
             onChange={(e) => {
-              this.props.onPlayerNameChange(e, id);
+              this.onPlayerNameChange(e, id);
             }}
             type="text"
+            value={"Player " + id}
           />
           <br />
           <InputGroup className="mb-3">
@@ -48,7 +52,7 @@ class PlayerForm extends Component {
             </InputGroup.Prepend>
             <Form.Control
               onChange={(e) => {
-                this.props.onPlayerNumberChange(e, id);
+                this.onPlayerNumberChange(e, id);
               }}
               aria-describedby="basic-addon1"
               type="number"
@@ -58,6 +62,13 @@ class PlayerForm extends Component {
       </div>
     );
   }
+
+  newPlayer(newPlayer) {
+    let playersOld = this.state.players;
+    playersOld.push(newPlayer);
+    this.setState({ players: playersOld });
+  }
+
   render() {
     return (
       <div>

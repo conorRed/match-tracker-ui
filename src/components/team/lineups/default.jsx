@@ -5,7 +5,6 @@ class LineupDefault extends Component {
     players: this.props.players,
   };
   render() {
-    console.log(this.state.players);
     return (
       <div>
         <div className="row">

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { createTeam, createPlayer, handleError } from "../../api/helpers.js";
+import { createTeam, createPlayers, handleError } from "../../api/helpers.js";
 import TeamForm from "./teamForm";
 import PlayerForm from "./playerForm";
 import Button from "react-bootstrap/Button";
@@ -13,66 +13,45 @@ class CreateFormContainer extends Component {
       renderPlayerForm: false,
       creationInformation: "",
       infoVariant: "",
+      teamCreated: false,
+      team: null,
+      players: [],
       bulkCreateData: {
         teamData: {},
-        playerData: [{}],
+        playerData: [],
       },
     };
 
-    this.onPlayerNameChange = this.onPlayerNameChange.bind(this);
     this.onTeamNameChange = this.onTeamNameChange.bind(this);
     this.onTeamColourChange = this.onTeamColourChange.bind(this);
     this.submitTeamData = this.submitTeamData.bind(this);
     this.submitPlayerData = this.submitPlayerData.bind(this);
-    this.registerPlayer = this.registerPlayer.bind(this);
     this.toggleForms = this.toggleForms.bind(this);
     this.bulkSubmit = this.bulkSubmit.bind(this);
     this.creationInformation = this.creationInformation.bind(this);
   }
 
-  bulkSubmit() {
-    createTeam(this.state.bulkCreateData.teamData)
-      .then((response) => {
-        if (!response.ok) {
-          this.setState({
-            colourError: "Theres already a team with this colour",
-          });
-          throw Error(response.status);
-        }
-        return response;
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        for (
-          let playerIndex = 1;
-          playerIndex < this.state.bulkCreateData.playerData.length;
-          playerIndex++
-        ) {
-          this.state.bulkCreateData.playerData[playerIndex]["team_id"] = res.id;
-          createPlayer(this.state.bulkCreateData.playerData[playerIndex])
-            .then((response) => {
-              if (!response.ok) {
-                throw Error(response.statusText);
-              }
-              return response;
-            })
-            .then(() => {
-              this.setState({
-                creationInformation:
-                  "Players Created for new team: " + res.name,
-                infoVariant: "success",
-              });
-            });
-        }
-      })
-      .catch((status) => {
-        console.log(status);
-        let message = handleError(status.message);
+  async bulkSubmit() {
+    const teamData = this.state.bulkCreateData.teamData;
+    let playerData = this.state.bulkCreateData.playerData;
+    try {
+      const team = await createTeam(teamData)
+        .then(handleError)
+        .then((response) => response.json());
+      const teamId = team.id;
+
+      playerData.map((p) => (p["team_id"] = teamId));
+      createPlayers(playerData)
+        .then(handleError)
+        .then((response) => this.setState({ creationInformation: "success" }));
+    } catch (errResponse) {
+      errResponse.text().then((errorMessage) => {
         this.setState({
-          creationInformation: message,
           infoVariant: "danger",
+          creationInformation: errorMessage,
         });
       });
+    }
   }
 
   submitTeamData(teamData) {
@@ -84,12 +63,13 @@ class CreateFormContainer extends Component {
   registerPlayer(id) {
     let currentBulkCreateData = this.state.bulkCreateData;
     let currentPlayerData = currentBulkCreateData.playerData;
-    currentPlayerData[id] = { name: "Player " + id, number: id };
+    currentPlayerData[id] = { name: "Player " + id, number: id + 1 };
     currentBulkCreateData.playerData = currentPlayerData;
     this.setState({ bulkCreateData: currentBulkCreateData });
   }
 
   submitPlayerData(playerData) {
+    console.log(playerData);
     let bulkdataNew = this.state.bulkCreateData;
     bulkdataNew.playerData = playerData;
     this.setState({ bulkCreateData: bulkdataNew });
@@ -99,27 +79,12 @@ class CreateFormContainer extends Component {
     let currentBulkCreate = this.state.bulkCreateData;
     currentBulkCreate.teamData.name = event.target.value;
     this.setState({ bulkCreateData: currentBulkCreate });
-    console.log(this.state.bulkCreateData);
   }
 
   onTeamColourChange(event) {
-    console.log(event);
     let currentBulkCreate = this.state.bulkCreateData;
     currentBulkCreate.teamData.colour = event.value;
     this.setState({ bulkCreateData: currentBulkCreate });
-    console.log(this.state.bulkCreateData);
-  }
-
-  onPlayerNameChange(event, id) {
-    let currentPlayersMap = this.state.bulkCreateData;
-    currentPlayersMap.playerData[id].name = event.currentTarget.value;
-    this.setState({ bulkCreateData: currentPlayersMap });
-  }
-
-  onPlayerNumberChange(event, id) {
-    let currentPlayersMap = this.state.bulkCreateData;
-    currentPlayersMap.playerData[id].number = event.currentTarget.value;
-    this.setState({ bulkCreateData: currentPlayersMap });
   }
 
   toggleForms() {
@@ -170,15 +135,7 @@ class CreateFormContainer extends Component {
     } else if (renderPlayerForm) {
       return (
         <>
-          <Row>
-            <Col>
-              <PlayerForm
-                handleSubmit={this.submitPlayerData}
-                onPlayerNameChange={this.onPlayerNameChange}
-                registerPlayer={this.registerPlayer}
-              />
-            </Col>
-          </Row>
+          <Row></Row>
           <Row>
             <Col>
               <Button variant="primary" onClick={this.toggleForms}>

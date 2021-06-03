@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import "../stylesheet/stylesheet.css";
-import pitch from "../img/pitch.png";
-import LoadingSpinner from "./loadingSpinner";
-import { getOutcomesForEvent } from "../api/helpers.js";
+import "../../../stylesheet/stylesheet.css";
+import pitch from "../../../img/pitch.png";
+import LoadingSpinner from "../../loadingSpinner";
+import { getOutcomesForEvent } from "../../../api/helpers.js";
 class EventsModal extends Component {
   constructor(props) {
     super(props);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import { FaDownload } from "react-icons/fa";
 
 class DataTable extends Component {

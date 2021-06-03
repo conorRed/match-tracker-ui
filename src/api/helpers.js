@@ -75,12 +75,21 @@ export function createPlayer(jsonObj) {
   });
 }
 
-export function handleError(errorStatus) {
-  if (errorStatus === "500") {
-    return "There was an issue processing your request";
-  } else if (errorStatus === "400") {
-    return "Please fill in missing fields";
-  } else {
-    return;
+export function createPlayers(jsonObjArray) {
+  console.log(jsonObjArray);
+  return fetch("/api/players", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonObjArray),
+  });
+}
+
+export function handleError(response) {
+  if (!response.ok) {
+    throw response;
   }
+  return response;
 }

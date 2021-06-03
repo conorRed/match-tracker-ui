@@ -56,7 +56,7 @@ class TeamSheet extends Component {
     this.props.addData(data);
   };
   render() {
-    const { isLoaded, teams, isTeamPicked } = this.state;
+    const { isLoaded, isTeamPicked } = this.state;
     if (isLoaded) {
       if (isTeamPicked) {
         return (

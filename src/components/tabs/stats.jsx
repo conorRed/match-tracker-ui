@@ -22,9 +22,9 @@ class Stats extends Component {
   }
   frequencyOfEvent(event, team) {
     let totalEvents = this.props.data.filter(
-      (row) => row.event == event && row.team == team
+      (row) => row.event === event && row.team === team
     );
-    console.log(totalEvents);
+
     return totalEvents.length;
   }
 
@@ -32,7 +32,7 @@ class Stats extends Component {
     let totalShots = this.frequencyOfEvent("Shot", team);
     let totalFrees = this.frequencyOfEvent("Free", team);
     let totalScores = this.props.data.filter(
-      (row) => ["Point", "Goal"].includes(row.outcome) && row.team == team
+      (row) => ["Point", "Goal"].includes(row.outcome) && row.team === team
     );
 
     return ((totalScores.length / (totalShots + totalFrees)) * 100).toFixed(1);
@@ -40,7 +40,7 @@ class Stats extends Component {
   kickoutEfficiency(team) {
     let totalShots = this.frequencyOfEvent("Kickout", team);
     let totalScores = this.props.data.filter(
-      (row) => ["Clean"].includes(row.outcome) && row.team == team
+      (row) => ["Clean"].includes(row.outcome) && row.team === team
     );
 
     return ((totalScores.length / totalShots) * 100).toFixed(1);

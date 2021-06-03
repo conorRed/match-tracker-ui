@@ -31,7 +31,8 @@ class Timer extends Component {
         seconds: this.state.seconds + 1,
       });
     } else {
-      this.setState({ seconds: ++this.state.seconds });
+      let newSec = this.state.seconds + 1;
+      this.setState({ seconds: newSec });
     }
   }
 
