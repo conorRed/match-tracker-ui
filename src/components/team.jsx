@@ -1,69 +1,125 @@
-import React, { Component } from "react";
-import Player from "./player";
-import { getEvents, getPlayers } from "../api/helpers";
-import LineupDefault from "./lineups/default";
+import React from "react";
+import { getPlayers, getTeam } from "../api/helpers";
+import { useEffect, useState } from "react";
+import LineupDefault from "./Lineups/default";
 import LoadingSpinner from "./loadingSpinner";
-class Team extends Component {
-  state = {
-    name: this.props.name,
-    colour: this.props.colour,
-    arePlayersLoaded: false,
-    areEventsLoaded: false,
-    events: [],
-    players: [],
-  };
-  componentDidMount() {
-    getPlayers(this.props.team_id)
-      .then((result) => {
-        if (!(result.length === 0)) {
-          this.setState({ arePlayersLoaded: true, players: result });
-        } else {
-          this.setState({ arePlayersLoaded: false });
-        }
+import { PlayerFunction } from "./player";
 
-        getEvents()
-          .then((res) => {
-            if (!(result === 0)) {
-              this.setState({ areEventsLoaded: true, events: res });
-            } else {
-              this.setState({ arePlayersLoaded: false });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  render() {
-    let playerList = [];
-    const { arePlayersLoaded, areEventsLoaded } = this.state;
-    if (areEventsLoaded && arePlayersLoaded) {
-      return (
-        <div className="container">
-          <LineupDefault
-            players={this.state.players.map((player, index) => {
-              return (
-                <Player
-                  addData={this.props.addData}
-                  events={this.state.events}
-                  key={player.number}
-                  number={player.number}
-                  name={player.name}
-                  colour={this.state.colour}
-                  team={this.state.name}
-                />
-              );
-            })}
-          />
-        </div>
-      );
-    } else {
-      return <LoadingSpinner />;
+export function TeamFunction(props) {
+  let token = props.token;
+  let [players, setPlayers] = useState(null);
+  let [team, setTeam] = useState(null);
+
+  async function fetchAndSetTeam(token) {
+    let apiResponse = await getTeam(props.id);
+    if (!apiResponse.ok) {
+      console.error(apiResponse);
+      return;
     }
+    let team = await apiResponse.json();
+    setTeam(team);
   }
+  async function fetchAndSetPlayers(token) {
+    let apiResponse = await getPlayers(props.id);
+    if (!apiResponse.ok) {
+      console.error(apiResponse);
+      return;
+    }
+    let players = await apiResponse.json();
+    setPlayers(players.items);
+  }
+  useEffect(() => {
+    fetchAndSetPlayers(token);
+    fetchAndSetTeam(token);
+  }, [token]);
+  if (!players || !team) {
+    return <LoadingSpinner />;
+  }
+  return (
+    <LineupDefault
+      goalkeeper={
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[0]}
+          colour={team.colour}
+        />
+      }
+      fullBackLine={[
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[1]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[2]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[3]}
+          colour={team.colour}
+        />,
+      ]}
+      halfBackLine={[
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[4]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[5]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[6]}
+          colour={team.colour}
+        />,
+      ]}
+      midField={[
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[7]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[8]}
+          colour={team.colour}
+        />,
+      ]}
+      halfForwardLine={[
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[9]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[10]}
+          colour={team.colour}
+        />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[11]}
+          colour={team.colour}
+        />,
+      ]}
+      fullForwardLine={[
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[12]}
+          colour={team.colour}
+        />,
+        <PlayerFunction {...players[13]} colour={team.colour} />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[14]}
+          colour={team.colour}
+        />,
+      ]}
+    />
+  );
 }
-
-export default Team;

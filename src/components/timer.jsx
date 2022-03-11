@@ -1,72 +1,61 @@
-import React, { Component } from "react";
+import React from "react";
 import { FaPlay, FaPause, FaStop } from "react-icons/fa";
 import { Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import { useState } from "react";
 
-class Timer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      minutes: 0,
-      seconds: 0,
-      hours: 0,
-      stopped: false,
-      start: false,
-      pause: false,
-      interval: null,
-      timestamp: "",
-    };
-  }
-  setTime() {
-    let seconds = this.state.seconds;
-    let minutes = this.state.minutes;
-    if (++seconds === 60) {
-      this.setState({
-        minutes: this.state.minutes + 1,
-        seconds: 0,
-      });
-    } else if (++minutes === 60) {
-      this.setState({
-        hours: this.state.hours + 1,
-        minutes: 0,
-        seconds: this.state.seconds + 1,
-      });
+export default function GameTimer({
+  start,
+  pause,
+  setStart,
+  setPause,
+  setTimestamp,
+}) {
+  let [seconds, setSeconds] = useState(0);
+  let [minutes, setMinutes] = useState(0);
+  let [hours, setHours] = useState(0);
+  let [interval, setInterval] = useState(null);
+
+  function setTime() {
+    if (pause) {
+      return;
+    }
+    if (seconds + 1 === 60) {
+      setSeconds(0);
+      setMinutes((prevMinutes) => prevMinutes + 1);
+    } else if (minutes + 1 === 60) {
+      setHours((prevHours) => prevHours + 1);
+      setMinutes(0);
+      setSeconds((prevSec) => prevSec + 1);
     } else {
-      this.setState({ seconds: ++this.state.seconds });
+      setSeconds((prevSec) => prevSec + 1);
     }
   }
 
-  resetTimer() {
-    this.setState({
-      hours: 0,
-      seconds: 0,
-      minutes: 0,
-      start: false,
-    });
-    clearInterval(this.state.interval);
+  function resetTimer() {
+    setHours(0);
+    setMinutes(0);
+    setSeconds(0);
+    setStart(false);
+    clearInterval(interval);
   }
-
-  startTimer() {
-    if (!this.state.start) {
-      this.setState({
-        interval: window.setInterval(() => {
-          this.setTime();
-        }, 1000),
-        start: true,
-      });
+  function startTimer() {
+    if (!start) {
+      setInterval(window.setInterval(setTime, 1000));
+      setStart(true);
     } else {
       return;
     }
   }
 
-  pauseTimer() {
-    this.setState({
-      pause: !this.state.pause,
-      start: false,
-    });
-    clearInterval(this.state.interval);
+  function pauseTimer() {
+    setPause(!pause);
+    setStart(false);
+    setTimestamp(format(hours, minutes, seconds));
+    clearInterval(interval);
   }
 
-  format(hours, minutes, seconds) {
+  function format(hours, minutes, seconds) {
     hours = hours + "";
     if (hours.length === 1) {
       hours = "0" + hours;
@@ -82,51 +71,49 @@ class Timer extends Component {
     let timestamp = hours + ":" + minutes + ":" + seconds;
     return timestamp;
   }
-  render() {
-    return (
-      <div className="container">
-        <div className="row" style={{ textAlign: "center" }}>
-          <h2 className="display-5">
-            {this.format(
-              this.state.hours,
-              this.state.minutes,
-              this.state.seconds
-            )}
-          </h2>
-        </div>
-        <div>
-          <div className="row" style={{ textAlign: "center" }}>
+
+  if (pause) {
+    pauseTimer();
+  }
+
+  return (
+    <>
+      <Container>
+        <Row style={{ textAlign: "center" }}>
+          <Col>
+            <h2 className="display-5">{format(hours, minutes, seconds)}</h2>
+          </Col>
+        </Row>
+        <Row style={{ textAlign: "center" }}>
+          <Col xs={4}>
             <Button
-              className="col-3"
               onClick={() => {
-                this.startTimer();
+                startTimer();
               }}
-              style={{ fontSize: 10, margin: 3, marginLeft: 5 }}
             >
               <FaPlay />
             </Button>
+          </Col>
+          <Col xs={4}>
             <Button
-              style={{ fontSize: 10, margin: 3 }}
               onClick={() => {
-                this.pauseTimer();
+                pauseTimer();
               }}
-              className="col-3"
             >
               <FaPause />
             </Button>
+          </Col>
+          <Col xs={4}>
             <Button
-              className="col-3"
-              style={{ fontSize: 10, margin: 3 }}
               onClick={() => {
-                this.resetTimer();
+                resetTimer();
               }}
             >
               <FaStop />
             </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
 }
-export default Timer;

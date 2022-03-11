@@ -1,144 +1,54 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import ReactDom from "react-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./js/script.js";
-import TeamSheet from "./components/teamSheet";
-import Timer from "./components/timer";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import DataTable from "./components/tabs/dataTable";
-import Stats from "./components/tabs/stats";
-import CreateFormContainer from "./components/forms/createFormContainer.jsx";
+import Login from "./components/Login/Login";
+import UserDashboard from "./components/User/dashboard";
+import GameDashboard from "./components/Game/dashboard";
+import GameTimer from "./components/timer";
+import Layout from "./components/layout";
+import { getCookie, setCookie, isTokenExpired } from "./api/helpers";
+import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 class Index extends Component {
-  state = {
-    error: null,
-    isLoaded: false,
-    teams: [],
-    data: [],
-    timerRef: React.createRef(),
-
-    modalShow: false,
-  };
-  showEditEventModal = (show) => {
-    this.setState({ modalShow: show });
-  };
-
-  format(hours, minutes, seconds) {
-    hours = hours + "";
-    if (hours.length === 1) {
-      hours = "0" + hours;
-    }
-    minutes = minutes + "";
-    if (minutes.length === 1) {
-      minutes = "0" + minutes;
-    }
-    seconds = seconds + "";
-    if (seconds.length === 1) {
-      seconds = "0" + seconds;
-    }
-    let timestamp = hours + ":" + minutes + ":" + seconds;
-    return timestamp;
-  }
-  updateTable = (da) => {
-    console.log(this.state.timerRef.current);
-    let timestamp = this.format(
-      this.state.timerRef.current.state.hours,
-      this.state.timerRef.current.state.minutes,
-      this.state.timerRef.current.state.seconds
-    );
-
-    da["timestamp"] = timestamp;
-    console.log("da", da);
-    this.setState((prevState) => ({
-      data: [...prevState.data, da],
-    }));
-  };
-  tableHeaders = [
-    "Team",
-    "Player",
-    "Event",
-    "Outcome",
-    "Pitchzone",
-    "Timestamp",
-  ];
-
-  teamSelect = (team) => {
-    let oldTeams = this.state.teams.slice();
-    oldTeams.push(team);
-    this.setState({ teams: oldTeams });
-  };
-
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-10">
-            <div className="row">
-              <div className="col-5">
-                <TeamSheet
-                  teamSelect={this.teamSelect}
-                  addData={this.updateTable}
-                />
-              </div>
-              <div className="col-2">
-                <Timer ref={this.state.timerRef} />
-              </div>
-              <div className="col-5">
-                <TeamSheet
-                  teamSelect={this.teamSelect}
-                  addData={this.updateTable}
-                />
-              </div>
-            </div>
-            <div>
-              <Tab.Container defaultActiveKey="data">
-                <div className="row">
-                  <div className="col-sm-3">
-                    <Nav variant="pills" className="flex-column">
-                      <Nav.Item>
-                        <Nav.Link eventKey="data">Data</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="stats">Stats</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="create-team">Create Team</Nav.Link>
-                      </Nav.Item>
-                    </Nav>
-                  </div>
-                  <div className="col-sm-9">
-                    <Tab.Content>
-                      <Tab.Pane eventKey="data">
-                        <DataTable
-                          rows={this.state.data}
-                          headers={this.tableHeaders}
-                        />
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="stats">
-                        <div className="row">
-                          {this.state.teams.map((team) => {
-                            return (
-                              <div className="col">
-                                <Stats team={team} data={this.state.data} />
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="create-team">
-                        <CreateFormContainer />
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </div>
-                </div>
-              </Tab.Container>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route element={<RequireAuth />}>
+              <Route
+                path="/login"
+                element={<Login setToken={setTokenCookie} />}
+              />
+              <Route path="/" element={<UserDashboard />} />
+              <Route
+                path="/games/:gameid"
+                element={<GameDashboard timer={<GameTimer />} />}
+              />
+            </Route>
+          </Routes>
+        </Layout>
+      </BrowserRouter>
     );
   }
+}
+
+function setTokenCookie(token) {
+  setCookie("access_token", token, 10);
+}
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const token = getCookie("access_token");
+  let navigate = useNavigate();
+  if (token === "" || token === null) {
+    return <Login setToken={setTokenCookie} />;
+  } else if (isTokenExpired(token)) {
+    return <Login setToken={setTokenCookie} />;
+  }
+  return <Outlet context={[token]} />;
 }
 
 ReactDom.render(<Index />, document.getElementById("root"));
