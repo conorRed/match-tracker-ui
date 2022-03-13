@@ -28,7 +28,6 @@ export default function EventsTable({ events }) {
 }
 
 function EventRow({ event }) {
-  console.log(event);
   return (
     <tr>
       <td> {event.id} </td>

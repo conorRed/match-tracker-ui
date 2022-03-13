@@ -3,6 +3,7 @@ import { FaPlay, FaPause, FaStop } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function GameTimer({
   start,
@@ -16,43 +17,58 @@ export default function GameTimer({
   let [hours, setHours] = useState(0);
   let [interval, setInterval] = useState(null);
 
-  function setTime() {
+  // Any time the timer is controlled by another component
+  useEffect(() => {
+    if (start) {
+      startTimer();
+    }
     if (pause) {
-      return;
+      pauseTimer();
     }
-    if (seconds + 1 === 60) {
-      setSeconds(0);
-      setMinutes((prevMinutes) => prevMinutes + 1);
-    } else if (minutes + 1 === 60) {
-      setHours((prevHours) => prevHours + 1);
-      setMinutes(0);
-      setSeconds((prevSec) => prevSec + 1);
-    } else {
-      setSeconds((prevSec) => prevSec + 1);
-    }
+  }, [start, pause]);
+
+  function setTime() {
+    setSeconds((seconds) => {
+      if (seconds + 1 === 5) {
+        setMinutes((minutes) => {
+          if (minutes + 1 === 5) {
+            setHours((prevHours) => prevHours + 1);
+            return 0;
+          } else {
+            return minutes + 1;
+          }
+        });
+        return 0;
+      } else {
+        return seconds + 1;
+      }
+    });
   }
 
   function resetTimer() {
     setHours(0);
     setMinutes(0);
     setSeconds(0);
-    setStart(false);
     clearInterval(interval);
+    setStart(false);
+    setPause(false);
+    setInterval(null);
   }
   function startTimer() {
-    if (!start) {
-      setInterval(window.setInterval(setTime, 1000));
-      setStart(true);
-    } else {
+    if (interval) {
       return;
     }
+    setInterval(
+      window.setInterval(() => {
+        setTime();
+      }, 1000)
+    );
   }
 
   function pauseTimer() {
-    setPause(!pause);
-    setStart(false);
     setTimestamp(format(hours, minutes, seconds));
     clearInterval(interval);
+    setInterval(null);
   }
 
   function format(hours, minutes, seconds) {
@@ -70,10 +86,6 @@ export default function GameTimer({
     }
     let timestamp = hours + ":" + minutes + ":" + seconds;
     return timestamp;
-  }
-
-  if (pause) {
-    pauseTimer();
   }
 
   return (

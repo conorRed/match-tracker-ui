@@ -58,11 +58,14 @@ export default function GameDashboard(props) {
     setShowModal(false);
     // update the events list
     fetchAndSetGames(token);
+    setPauseTimer(false);
+    setStartTimer(true);
   }
 
   // defined here as the modal occupies the full screen
   function addEventForPlayerFunc() {
     setPauseTimer(true);
+    setStartTimer(false);
     setShowModal(true);
   }
 
