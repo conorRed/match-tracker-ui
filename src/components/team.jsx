@@ -113,7 +113,11 @@ export function TeamFunction(props) {
           {...players[12]}
           colour={team.colour}
         />,
-        <PlayerFunction {...players[13]} colour={team.colour} />,
+        <PlayerFunction
+          actionFunc={props.addEventForPlayer}
+          {...players[13]}
+          colour={team.colour}
+        />,
         <PlayerFunction
           actionFunc={props.addEventForPlayer}
           {...players[14]}

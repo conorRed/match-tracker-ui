@@ -32,7 +32,7 @@ function EventRow({ event }) {
     <tr>
       <td> {event.id} </td>
       <td> {event.event_option ? event.event_option.name : ""} </td>
-      <td> {event.outcome.name} </td>
+      <td> {event.outcome ? event.outcome.name : ""} </td>
       <td> {event.pitchzone} </td>
       <td> {event.timestamp}</td>
     </tr>

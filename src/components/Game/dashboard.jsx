@@ -24,6 +24,7 @@ export default function GameDashboard(props) {
   let [eventOption, setEventOption] = useState(null);
   let [eventOutcomeId, setEventOutcomeId] = useState(null);
   let [pitchzone, setPitchZone] = useState("Fullback");
+  let [csvFormattedData, setCsvFormattedData] = useState([]);
 
   // Settings for game timer
   let [gameTimerTimestamp, setTimestamp] = useState("");
@@ -60,6 +61,16 @@ export default function GameDashboard(props) {
     fetchAndSetGames(token);
     setPauseTimer(false);
     setStartTimer(true);
+    setCsvFormattedData(formatForCsv());
+  }
+
+  function formatForCsv() {
+    let csvFormattedGames = game.events.map((ev) => {
+      ev.event_option = ev.event_option.name;
+      ev.outcome = ev.outcome.name;
+      return ev;
+    });
+    return csvFormattedGames;
   }
 
   // defined here as the modal occupies the full screen
@@ -85,7 +96,7 @@ export default function GameDashboard(props) {
             <CSVLink
               style={{ padding: 15, fontSize: 25 }}
               filename={`${game.name}-events.csv`}
-              data={game.events}
+              data={csvFormattedData}
             >
               <FaDownload />
             </CSVLink>

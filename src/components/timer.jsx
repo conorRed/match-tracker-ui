@@ -29,9 +29,9 @@ export default function GameTimer({
 
   function setTime() {
     setSeconds((seconds) => {
-      if (seconds + 1 === 5) {
+      if (seconds + 1 === 60) {
         setMinutes((minutes) => {
-          if (minutes + 1 === 5) {
+          if (minutes + 1 === 60) {
             setHours((prevHours) => prevHours + 1);
             return 0;
           } else {
