@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./js/script.js";
 import Login from "./components/Login/Login";
 import UserDashboard from "./components/User/dashboard";
-import GameDashboard from "./components/Game/dashboard";
+import GameDashboard from "./components/Game/Dashboard";
 import GameTimer from "./components/timer";
 import Layout from "./components/layout";
 import { getCookie, setCookie, isTokenExpired } from "./api/helpers";

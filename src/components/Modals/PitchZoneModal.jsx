@@ -18,51 +18,96 @@ export default function PitchZoneModal({ updatePitchzone }) {
               className="col pitchzone"
               data-dismiss="modal"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="Cornerback-Left"
+              value="Z1"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="Mid-Left"
+              value="Z2"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="CornerForward-Left"
-            ></button>
-          </div>
-          <div className="row">
-            <button
-              className="col pitchzone"
-              onClick={(e) => updatePitchzone(e.target.value)}
-              value="Fullback"
+              value="Z3"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="Center Field"
+              value="Z4"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="Fullforward"
+              value="Z5"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z6"
             ></button>
           </div>
           <div className="row">
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="CornerForward-Right"
+              value="Z7"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="Mid-Right"
+              value="Z8"
             ></button>
             <button
               className="col pitchzone"
               onClick={(e) => updatePitchzone(e.target.value)}
-              value="CornerForward-Right"
+              value="Z9"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z10"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z11"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z12"
+            ></button>
+          </div>
+          <div className="row">
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z13"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z14"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z15"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z16"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z17"
+            ></button>
+            <button
+              className="col pitchzone"
+              onClick={(e) => updatePitchzone(e.target.value)}
+              value="Z18"
             ></button>
           </div>
         </div>

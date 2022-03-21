@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { getGame, createEventForGame } from "../../api/helpers";
 import LoadingSpinner from "../loadingSpinner";
+import Scoreboard from "../scoreboard";
 import { TeamFunction } from "../team";
 import EventsTable from "./EventsTable";
 import GameTimer from "../timer";
@@ -30,6 +31,10 @@ export default function GameDashboard(props) {
   let [gameTimerTimestamp, setTimestamp] = useState("");
   let [startTimer, setStartTimer] = useState(false);
   let [pauseTimer, setPauseTimer] = useState(false);
+
+  // scoreboard settings
+  let [goals, setGoals] = useState(0);
+  let [points, setPoints] = useState(0);
   async function fetchAndSetGames(token) {
     let apiResponse = await getGame(token, params.gameid);
     if (!apiResponse.ok) {
@@ -38,6 +43,8 @@ export default function GameDashboard(props) {
     }
     let game = await apiResponse.json();
     setGame(game);
+    updateGoals(game.events);
+    updatePoints(game.events);
   }
 
   async function submitEventForGame() {
@@ -62,6 +69,25 @@ export default function GameDashboard(props) {
     setPauseTimer(false);
     setStartTimer(true);
     setCsvFormattedData(formatForCsv());
+  }
+
+  function updateGoals(events) {
+    let count = 0;
+    for (let i in events) {
+      if (events[i].outcome.name === "Goal") {
+        count = count + 1;
+      }
+    }
+    setGoals(count);
+  }
+  function updatePoints(events) {
+    let count = 0;
+    for (let i in events) {
+      if (events[i].outcome.name === "Point") {
+        count = count + 1;
+      }
+    }
+    setPoints(count);
   }
 
   function formatForCsv() {
@@ -120,6 +146,7 @@ export default function GameDashboard(props) {
             setPause={setPauseTimer}
             setTimestamp={setTimestamp}
           />
+          <Scoreboard goals={goals} points={points} />
         </Col>
         <Col sm={5}>
           <h2 className="display-5 text-center">{game.away_team.name}</h2>

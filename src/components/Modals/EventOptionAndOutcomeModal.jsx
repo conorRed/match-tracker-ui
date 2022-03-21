@@ -55,7 +55,11 @@ export default function EventOptionAndOutcomeModal(props) {
                 defaultValue={events[0].id}
                 onChange={(event) => {
                   setChosenEventOnParent(parseInt(event.target.value));
-                  setOutcomes(outcomesForEvent(parseInt(event.target.value)));
+                  let newOutcomes = outcomesForEvent(
+                    parseInt(event.target.value)
+                  );
+                  setOutcomes(newOutcomes);
+                  props.updateEventOutcome(newOutcomes[0].id);
                 }}
               >
                 {events.map((event) => {
