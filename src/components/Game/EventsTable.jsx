@@ -4,7 +4,14 @@ import { useState } from "react";
 import { Table } from "react-bootstrap";
 
 export default function EventsTable({ events }) {
-  let [headers] = useState(["id", "name", "outcome", "pitchzone", "timestamp"]);
+  let [headers] = useState([
+    "id",
+    "team",
+    "name",
+    "outcome",
+    "pitchzone",
+    "timestamp",
+  ]);
   return (
     <Table>
       <thead>
@@ -31,6 +38,7 @@ function EventRow({ event }) {
   return (
     <tr>
       <td> {event.id} </td>
+      <td> {event.team ? event.team.name : ""} </td>
       <td> {event.event_option ? event.event_option.name : ""} </td>
       <td> {event.outcome ? event.outcome.name : ""} </td>
       <td> {event.pitchzone} </td>

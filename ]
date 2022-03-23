@@ -35,7 +35,6 @@ export default function GameDashboard(props) {
   // scoreboard settings
   let [homeGoals, setHomeGoals] = useState(0);
   let [homePoints, setHomePoints] = useState(0);
-  let [awayGoals, setAwayGoals] = useState(0);
   let [awayPoints, setAwayPoints] = useState(0);
 
   // team id for event (home event vs away event)
@@ -47,13 +46,11 @@ export default function GameDashboard(props) {
       console.error(apiResponse);
       return;
     }
-    let loadedGame = await apiResponse.json();
-    setGame(loadedGame);
-    updateScoreboards(
-      loadedGame.events,
-      loadedGame.home_team,
-      loadedGame.away_team
-    );
+    let game = await apiResponse.json();
+    setGame(game);
+    updateScoreboards(game.events);
+    updateGoals(game.events, game.home_team);
+    updatePoints(game.events, game.home_team);
   }
 
   async function submitEventForGame() {
@@ -80,11 +77,11 @@ export default function GameDashboard(props) {
     setStartTimer(true);
     setCsvFormattedData(formatForCsv());
   }
-  function updateScoreboards(events, home_team, away_team) {
-    updateGoals(events, home_team, setHomeGoals);
-    updateGoals(events, away_team, setAwayGoals);
-    updatePoints(events, home_team, setHomePoints);
-    updatePoints(events, away_team, setAwayPoints);
+  function updateScoreboards(events) {
+    updateGoals(events, game.home_team, setHomeGoals);
+    updateGoals(events, game.away_team, setAwayGoals);
+    updatePoints(events, game.home_team, setHomePoints);
+    updatePoints(events, game.away_team, setAwayPoints);
   }
 
   function updateGoals(events, team, setGoals) {
