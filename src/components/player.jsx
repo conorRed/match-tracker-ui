@@ -21,7 +21,7 @@ export function PlayerFunction({ name, number, colour, actionFunc }) {
   return (
     <Col style={styles}>
       <button
-        onClick={actionFunc}
+        onClick={(e) => actionFunc(number)}
         className="btn player-select-button"
         style={buttonStyle}
         aria-haspopup="true"

@@ -5,7 +5,7 @@ import { Table } from "react-bootstrap";
 
 export default function EventsTable({ events }) {
   let [headers] = useState([
-    "id",
+    "#",
     "team",
     "name",
     "outcome",
@@ -35,9 +35,10 @@ export default function EventsTable({ events }) {
 }
 
 function EventRow({ event }) {
+  console.log(event);
   return (
     <tr>
-      <td> {event.id} </td>
+      <td> {event.player ? event.player.number : ""} </td>
       <td> {event.team ? event.team.name : ""} </td>
       <td> {event.event_option ? event.event_option.name : ""} </td>
       <td> {event.outcome ? event.outcome.name : ""} </td>

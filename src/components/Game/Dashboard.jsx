@@ -40,6 +40,7 @@ export default function GameDashboard(props) {
 
   // team id for event (home event vs away event)
   let [teamId, setTeamId] = useState(null);
+  let [chosenPlayerId, setChosenPlayerId] = useState(null);
 
   async function fetchAndSetGames(token) {
     let apiResponse = await getGame(token, params.gameid);
@@ -65,6 +66,7 @@ export default function GameDashboard(props) {
       game_id: game.id,
       timestamp: gameTimerTimestamp,
       team_id: teamId,
+      player_id: chosenPlayerId,
     };
     let apiResponse = await createEventForGame(event);
     if (!apiResponse.ok) {
@@ -111,20 +113,23 @@ export default function GameDashboard(props) {
       ev.event_option = ev.event_option.name;
       ev.outcome = ev.outcome.name;
       ev.team = ev.team.name;
+      ev.player = ev.player.number;
       return ev;
     });
     return csvFormattedGames;
   }
 
   // defined here as the modal occupies the full screen
-  function addEventForHomePlayerFunc() {
+  function addEventForHomePlayerFunc(id) {
     setTeamId(game.home_team.id);
+    setChosenPlayerId(id);
     setPauseTimer(true);
     setStartTimer(false);
     setShowModal(true);
   }
-  function addEventForAwayPlayerFunc() {
+  function addEventForAwayPlayerFunc(id) {
     setTeamId(game.away_team.id);
+    setChosenPlayerId(id);
     setPauseTimer(true);
     setStartTimer(false);
     setShowModal(true);
