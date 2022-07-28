@@ -22,7 +22,6 @@ export async function getGame(token, id) {
     },
   });
 }
-
 export function createGame(token, jsonObj) {
   return fetch("/api/games", {
     method: "POST",
@@ -60,6 +59,17 @@ export async function getEvents() {
 
 export async function getPlayers(team_id) {
   return await fetch(`/api/teams/${team_id}/players`, { method: "GET" });
+}
+
+export async function updatePlayer(player_id, jsonObj) {
+  return fetch(`/api/players/${player_id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonObj),
+  });
 }
 
 export async function getOutcomesForEvent(event_id) {

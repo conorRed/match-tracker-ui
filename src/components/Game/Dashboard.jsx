@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { getGame, createEventForGame } from "../../api/helpers";
+import { getGame, createEventForGame, updatePlayer } from "../../api/helpers";
 import LoadingSpinner from "../loadingSpinner";
 import Scoreboard from "../scoreboard";
 import { TeamFunction } from "../team";
@@ -8,18 +8,24 @@ import EventsTable from "./EventsTable";
 import GameTimer from "../timer";
 import EventModalContainer from "../Modals/EventModalContainer";
 import EventOptionAndOutcomeModal from "../Modals/EventOptionAndOutcomeModal";
+import SubstituteModal from "../Modals/SubstituteModal";
 import PitchZoneModal from "../Modals/PitchZoneModal";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Container, Col, Row } from "react-bootstrap";
 import { CSVLink } from "react-csv";
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaEdit } from "react-icons/fa";
 
 export default function GameDashboard(props) {
   let params = useParams();
   let token = useOutletContext();
   let [game, setGame] = useState(null);
   let [showModal, setShowModal] = useState(false);
+
+  let [showSubModal, setShowSubModal] = useState(false);
+  let [subOn, setSubOn] = useState(null);
+  let [subOff, setSubOff] = useState(null);
+  let [editTeamId, setEditTeamId] = useState(null);
 
   // Fields to create a game event
   let [eventOption, setEventOption] = useState(null);
@@ -82,6 +88,7 @@ export default function GameDashboard(props) {
     setStartTimer(true);
     setCsvFormattedData(formatForCsv());
   }
+
   function updateScoreboards(events, home_team, away_team) {
     updateGoals(events, home_team, setHomeGoals);
     updateGoals(events, away_team, setAwayGoals);
@@ -127,6 +134,7 @@ export default function GameDashboard(props) {
     setStartTimer(false);
     setShowModal(true);
   }
+
   function addEventForAwayPlayerFunc(id) {
     setTeamId(game.away_team.id);
     setChosenPlayerId(id);
